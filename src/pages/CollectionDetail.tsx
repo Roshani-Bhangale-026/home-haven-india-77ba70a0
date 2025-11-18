@@ -69,7 +69,7 @@ const CollectionDetail = () => {
       
       <section className="py-20 md:py-32">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Link to="/#collections">
+          <Link to="/collections">
             <Button variant="ghost" className="mb-8 group">
               <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back to Collections
