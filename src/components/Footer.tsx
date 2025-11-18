@@ -98,7 +98,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-background/20 pt-8 text-center text-sm text-background/80">
-          <p>&copy; {currentYear} Lumière Furniture. All rights reserved.</p>
+          <p>&copy; {currentYear} Lumière Furnitures. All rights reserved.</p>
         </div>
       </div>
     </footer>
