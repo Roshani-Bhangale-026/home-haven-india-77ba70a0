@@ -5,14 +5,16 @@ pipeline {
         nodejs 'nodejs'
     }
 
-    triggers {
-        githubPush()
+    environment {
+        AWS_REGION = "ap-south-1"
+        S3_BUCKET = "home-haven"   // <-- your S3 bucket name
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Roshani-Bhangale-026/home-haven-india-77ba70a0/new/main.git'
+                git branch: 'main', url: 'https://github.com/Roshani-Bhangale-026/home-haven-india-77ba70a0.git'
             }
         }
 
@@ -28,9 +30,13 @@ pipeline {
             }
         }
 
-        stage('Archive Build') {
+        stage('Deploy to S3') {
             steps {
-                archiveArtifacts artifacts: 'build/**', fingerprint: true
+                withAWS(credentials: 'aws-creds', region: "${AWS_REGION}") {
+                    sh """
+                        aws s3 sync build/ s3://${S3_BUCKET}/ --delete
+                    """
+                }
             }
         }
     }
