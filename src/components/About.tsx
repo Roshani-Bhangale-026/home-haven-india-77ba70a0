@@ -6,7 +6,7 @@ const features = [
   "Customization options available",
   "Sustainable manufacturing practices",
   "Lifetime craftsmanship warranty",
-  "Free design consultation",
+  "Free design consultations",
 ];
 
 const About = () => {
