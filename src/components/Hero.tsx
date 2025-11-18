@@ -28,13 +28,13 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/#collections">
+              <Link to="/collections">
                 <Button size="lg" className="text-base group">
                   Explore Collections
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
-              <Link to="/#about">
+              <Link to="/about">
                 <Button size="lg" variant="outline" className="text-base">
                   Learn More
                 </Button>
