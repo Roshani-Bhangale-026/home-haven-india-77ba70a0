@@ -1,6 +1,7 @@
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import diningImage from "@/assets/dining-collection.jpg";
 import bedroomImage from "@/assets/bedroom-collection.jpg";
 import livingImage from "@/assets/living-collection.jpg";
@@ -11,18 +12,21 @@ const collections = [
     description: "Elegant dining sets for memorable gatherings",
     image: diningImage,
     items: "150+ Items",
+    slug: "dining",
   },
   {
     title: "Bedroom",
     description: "Comfort meets luxury in every piece",
     image: bedroomImage,
     items: "200+ Items",
+    slug: "bedroom",
   },
   {
     title: "Living Room",
     description: "Contemporary designs for modern living",
     image: livingImage,
     items: "180+ Items",
+    slug: "living",
   },
 ];
 
@@ -69,10 +73,12 @@ const Collections = () => {
                 <p className="text-muted-foreground mb-4">
                   {collection.description}
                 </p>
-                <Button variant="ghost" className="group/button p-0 h-auto font-semibold">
-                  View Collection
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/button:translate-x-1" />
-                </Button>
+                <Link to={`/collections/${collection.slug}`}>
+                  <Button variant="ghost" className="group/button p-0 h-auto font-semibold">
+                    View Collection
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/button:translate-x-1" />
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}
