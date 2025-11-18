@@ -1,10 +1,13 @@
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, LogOut, Shield } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAdmin, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -38,10 +41,30 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="hidden md:block">
-            <Button variant="default" size="lg">
-              Get Started
-            </Button>
+          <div className="hidden md:flex items-center gap-2">
+            {user ? (
+              <>
+                {isAdmin && (
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate("/admin")}
+                    className="gap-2"
+                  >
+                    <Shield className="h-4 w-4" />
+                    Admin
+                  </Button>
+                )}
+                <Button variant="default" onClick={() => signOut()} className="gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Button variant="default" onClick={() => navigate("/auth")} className="gap-2">
+                <LogIn className="h-4 w-4" />
+                Sign In
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -71,10 +94,47 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <div className="px-3 pt-2">
-              <Button variant="default" className="w-full">
-                Get Started
-              </Button>
+            <div className="px-3 pt-2 space-y-2">
+              {user ? (
+                <>
+                  {isAdmin && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        navigate("/admin");
+                        setIsOpen(false);
+                      }}
+                      className="w-full gap-2"
+                    >
+                      <Shield className="h-4 w-4" />
+                      Admin
+                    </Button>
+                  )}
+                  <Button
+                    variant="default"
+                    onClick={() => {
+                      signOut();
+                      setIsOpen(false);
+                    }}
+                    className="w-full gap-2"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="default"
+                  onClick={() => {
+                    navigate("/auth");
+                    setIsOpen(false);
+                  }}
+                  className="w-full gap-2"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Sign In
+                </Button>
+              )}
             </div>
           </div>
         </div>
