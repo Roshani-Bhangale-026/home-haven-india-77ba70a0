@@ -1,36 +1,68 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import diningImage from "@/assets/dining-collection.jpg";
 import bedroomImage from "@/assets/bedroom-collection.jpg";
 import livingImage from "@/assets/living-collection.jpg";
 
-const collections = [
-  {
-    title: "Dining",
-    description: "Elegant dining sets for memorable gatherings",
-    image: diningImage,
-    items: "150+ Items",
-    slug: "dining",
-  },
-  {
-    title: "Bedroom",
-    description: "Comfort meets luxury in every piece",
-    image: bedroomImage,
-    items: "200+ Items",
-    slug: "bedroom",
-  },
-  {
-    title: "Living Room",
-    description: "Contemporary designs for modern living",
-    image: livingImage,
-    items: "180+ Items",
-    slug: "living",
-  },
-];
+const defaultImages: Record<string, string> = {
+  dining: diningImage,
+  bedroom: bedroomImage,
+  living: livingImage,
+};
+
+type Collection = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+};
 
 const Collections = () => {
+  const { toast } = useToast();
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("collections")
+          .select("*")
+          .order("created_at", { ascending: true });
+
+        if (error) throw error;
+        setCollections(data || []);
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCollections();
+  }, [toast]);
+
+  if (loading) {
+    return (
+      <section id="collections" className="py-20 md:py-32 bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p>Loading collections...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="collections" className="py-20 md:py-32 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,13 +81,13 @@ const Collections = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {collections.map((collection, index) => (
             <Card
-              key={collection.title}
+              key={collection.id}
               className="group overflow-hidden border-border hover:shadow-xl transition-all duration-500 animate-fade-in-up"
               style={{ animationDelay: `${index * 150}ms` }}
             >
               <div className="relative overflow-hidden aspect-square">
                 <img
-                  src={collection.image}
+                  src={defaultImages[collection.slug] || livingImage}
                   alt={collection.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
@@ -66,9 +98,6 @@ const Collections = () => {
                   <h3 className="text-2xl font-bold text-foreground">
                     {collection.title}
                   </h3>
-                  <span className="text-sm text-muted-foreground">
-                    {collection.items}
-                  </span>
                 </div>
                 <p className="text-muted-foreground mb-4">
                   {collection.description}
