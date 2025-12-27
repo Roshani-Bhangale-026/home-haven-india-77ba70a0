@@ -10,7 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const navLinks = [
-    { name: "HomeXX", href: "/" },
+    { name: "Home", href: "/" },
     { name: "Collections", href: "/collections" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
